@@ -1,0 +1,76 @@
+{
+  "fixture": "seeded-correctness",
+  "kind": "seeded",
+  "notes": "Neither seeded fixture ships tests, so 'untested new logic' findings (medium, severity.md fixed rule 1) are expected and REAL. Label them real when they appear under 'unexpected'.",
+  "targets": {
+    "recall": 0.7,
+    "high_plus_recall": 0.9
+  },
+  "defects": [
+    {
+      "id": "C1",
+      "summary": "applyDiscount treats a 0-100 percentage as a 0-1 fraction; 15% off produces a negative total",
+      "lenses": [
+        "correctness"
+      ],
+      "severity": "high",
+      "location": {
+        "file": "src/cart.ts",
+        "start_line": 11,
+        "end_line": 13
+      }
+    },
+    {
+      "id": "C2",
+      "summary": "paginate returns pageSize + 1 items; the last item of each page repeats as the first of the next",
+      "lenses": [
+        "correctness"
+      ],
+      "severity": "medium",
+      "location": {
+        "file": "src/cart.ts",
+        "start_line": 16,
+        "end_line": 19
+      }
+    },
+    {
+      "id": "C3",
+      "summary": "checkout uses forEach(async): reservations are not awaited, failures become unhandled rejections, and ok:true is returned before stock is reserved",
+      "lenses": [
+        "correctness"
+      ],
+      "severity": "high",
+      "location": {
+        "file": "src/cart.ts",
+        "start_line": 22,
+        "end_line": 27
+      }
+    },
+    {
+      "id": "C4",
+      "summary": "formatTotal reimplements the existing formatCurrency utility in src/utils/money.ts (and mishandles negative amounts)",
+      "lenses": [
+        "quality"
+      ],
+      "severity": "low",
+      "location": {
+        "file": "src/cart.ts",
+        "start_line": 29,
+        "end_line": 33
+      }
+    },
+    {
+      "id": "C5",
+      "summary": "legacyTotal is unexported and unused dead code (and ignores quantity)",
+      "lenses": [
+        "quality"
+      ],
+      "severity": "low",
+      "location": {
+        "file": "src/cart.ts",
+        "start_line": 35,
+        "end_line": 39
+      }
+    }
+  ]
+}

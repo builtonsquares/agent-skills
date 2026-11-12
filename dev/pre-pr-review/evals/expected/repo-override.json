@@ -1,0 +1,31 @@
+{
+  "fixture": "repo-override",
+  "kind": "seeded",
+  "notes": "RO1 must be driven by the repo rule. Observed 2026-11-12 (Claude Code, opus+sonnet): WITH .pre-pr-review.md -> medium/high, cites the rule; WITHOUT it (control: git rm the file) -> still flagged, but low/medium as an inferred convention from the one existing projects route. So the rule's measurable effect is severity and confidence (and citing the rule), not detection. When labeling by hand, check F's severity is medium and its why cites .pre-pr-review.md. Tests are present, so no missing-tests finding is expected.",
+  "targets": {
+    "recall": 1.0,
+    "high_plus_recall": 0.9
+  },
+  "defects": [
+    {
+      "id": "RO1",
+      "summary": "Route handler queries the database directly (imports db from ../db on line 3 and runs the ownership and task queries itself) instead of going through a repository in src/repositories/, violating the .pre-pr-review.md convention",
+      "lenses": [
+        "quality"
+      ],
+      "severity": "medium",
+      "location": {
+        "file": "src/routes/tasks.ts",
+        "start_line": 15,
+        "end_line": 26
+      },
+      "alt_locations": [
+        {
+          "file": "src/routes/tasks.ts",
+          "start_line": 3,
+          "end_line": 3
+        }
+      ]
+    }
+  ]
+}

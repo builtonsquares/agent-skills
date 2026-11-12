@@ -1,0 +1,37 @@
+{
+  "fixture": "go-concurrency",
+  "kind": "seeded",
+  "notes": "Go fan-out. No test setup, so one 'repo has no test setup' finding (medium, severity.md fixed rule 1) is expected and REAL.",
+  "targets": {
+    "recall": 0.7,
+    "high_plus_recall": 0.9
+  },
+  "defects": [
+    {
+      "id": "GC1",
+      "summary": "Goroutines write prices[sku] to a plain map with no lock (mu only guards failed); concurrent writes race and can crash with 'fatal error: concurrent map writes'",
+      "lenses": [
+        "correctness"
+      ],
+      "severity": "high",
+      "location": {
+        "file": "catalog.go",
+        "start_line": 41,
+        "end_line": 41
+      }
+    },
+    {
+      "id": "GC2",
+      "summary": "wg.Add(1) is called inside the goroutine, so wg.Wait() can run while the counter is still 0 and return before any lookup finishes; LookupPrices returns an empty or partial map with a nil error",
+      "lenses": [
+        "correctness"
+      ],
+      "severity": "high",
+      "location": {
+        "file": "catalog.go",
+        "start_line": 29,
+        "end_line": 29
+      }
+    }
+  ]
+}

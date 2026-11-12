@@ -1,0 +1,37 @@
+{
+  "fixture": "py-concurrency",
+  "kind": "seeded",
+  "notes": "Per-tenant token-bucket rate limiter used by WorkerPool threads. No test setup, so one 'repo has no test setup' finding (medium, severity.md fixed rule 1) is expected and REAL. Also acceptable if raised (real, not seeded): requeue_throttled() has no caller in this slice, and throttled jobs are dropped on stop().",
+  "targets": {
+    "recall": 0.7,
+    "high_plus_recall": 0.9
+  },
+  "defects": [
+    {
+      "id": "PC1",
+      "summary": "try_acquire refills, checks and decrements a shared bucket without holding the lock; concurrent workers can both see tokens >= 1 and both send, so tenants exceed their rate limit",
+      "lenses": [
+        "correctness"
+      ],
+      "severity": "high",
+      "location": {
+        "file": "src/notify/ratelimit.py",
+        "start_line": 47,
+        "end_line": 52
+      }
+    },
+    {
+      "id": "PC2",
+      "summary": "Mutable default overrides={} is shared by every TokenBucketLimiter built without overrides; set_capacity on one limiter changes the capacity used by all of them",
+      "lenses": [
+        "correctness"
+      ],
+      "severity": "medium",
+      "location": {
+        "file": "src/notify/ratelimit.py",
+        "start_line": 24,
+        "end_line": 24
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+[project]
+name = "reports"
+version = "0.7.0"
+description = "Internal report storage and export service"
+requires-python = ">=3.11"
+dependencies = ["flask>=3.0"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

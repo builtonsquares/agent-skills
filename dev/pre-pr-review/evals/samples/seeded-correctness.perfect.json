@@ -1,0 +1,48 @@
+{
+  "schema_version": "1",
+  "run": {
+    "branch": "feature",
+    "base_ref": "origin/main",
+    "base_sha": "0000000",
+    "head_sha": "1111111",
+    "mode": "A",
+    "lenses": {
+      "correctness": { "runs_configured": 2, "runs_completed": 2, "models_requested": ["opus", "gpt-terra"] },
+      "security": { "runs_configured": 2, "runs_completed": 2, "models_requested": ["opus", "gpt-terra"] },
+      "quality": { "runs_configured": 1, "runs_completed": 1, "models_requested": ["opus"] }
+    },
+    "write_violations": []
+  },
+  "findings": [
+    {
+      "id": "F1", "title": "Discount percentage applied as a fraction", "lenses": ["correctness"],
+      "severity": "high", "confidence": "high", "agreement": "agreed", "models": ["opus", "gpt-terra"],
+      "location": { "file": "src/cart.ts", "start_line": 12, "end_line": 12 },
+      "why": "discountPct is documented as 0-100, so 15 multiplies the total by -14.", "fix": "Divide by 100: totalCents * (1 - discountPct / 100)."
+    },
+    {
+      "id": "F2", "title": "checkout does not await reservations", "lenses": ["correctness"],
+      "severity": "high", "confidence": "high", "agreement": "agreed", "models": ["opus", "gpt-terra"],
+      "location": { "file": "src/cart.ts", "start_line": 23, "end_line": 26 },
+      "why": "forEach ignores the returned promises; checkout reports ok before any stock is reserved and failures are unhandled.", "fix": "await Promise.all(items.map(reserve)) and propagate failure."
+    },
+    {
+      "id": "F3", "title": "paginate returns one extra item", "lenses": ["correctness"],
+      "severity": "medium", "confidence": "high", "agreement": "single", "models": ["opus"],
+      "location": { "file": "src/cart.ts", "start_line": 18, "end_line": 18 },
+      "why": "slice end is exclusive, so +1 returns pageSize+1 items and duplicates across pages.", "fix": "items.slice(start, start + pageSize)."
+    },
+    {
+      "id": "F4", "title": "formatTotal duplicates formatCurrency", "lenses": ["quality"],
+      "severity": "low", "confidence": "medium", "agreement": "n/a", "models": ["opus"],
+      "location": { "file": "src/cart.ts", "start_line": 29, "end_line": 33 },
+      "why": "src/utils/money.ts already formats cents; this copy mishandles negatives.", "fix": "Use formatCurrency from ./utils/money."
+    },
+    {
+      "id": "F5", "title": "legacyTotal is dead code", "lenses": ["quality"],
+      "severity": "low", "confidence": "medium", "agreement": "n/a", "models": ["opus"],
+      "location": { "file": "src/cart.ts", "start_line": 35, "end_line": 39 },
+      "why": "Unexported and unused; also ignores quantity, so reviving it later would be wrong.", "fix": "Delete it."
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "fixture": "clean-large",
+  "kind": "clean",
+  "notes": "Pure refactor, behavior identical: services/orders.ts split into orders/{errors,create,queries,cancel}.ts with an index.ts re-export, money helpers moved to utils/money.ts, OrderRecord renamed to Order everywhere, tests moved to the new paths with the same cases. Any finding on moved code is noise.",
+  "targets": { "max_findings": 2, "max_high_plus": 0 },
+  "defects": []
+}

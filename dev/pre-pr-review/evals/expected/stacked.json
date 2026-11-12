@@ -1,0 +1,7 @@
+{
+  "fixture": "stacked",
+  "kind": "clean",
+  "notes": "Scope test, not a recall test. HEAD is feature-2, stacked on feature. Without base=, collect.sh must report STACKED_ON: feature and review both layers (validation.ts + profile.ts). With base=feature it must review only profile.ts.",
+  "targets": { "max_findings": 2, "max_high_plus": 0 },
+  "defects": []
+}

@@ -1,0 +1,12 @@
+# Review output from running the skill in this repo
+.pre-pr-review/
+
+# Local only, never published
+.remember/
+spike/
+dist/
+
+# OS / editor
+.DS_Store
+__pycache__/
+*.pyc

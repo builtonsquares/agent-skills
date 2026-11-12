@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pre-pr-review/findings.schema.json",
+  "title": "pre-pr-review findings",
+  "description": "Single source of truth for one review of one (base, head) pair. Markdown reports are rendered from this file; Mode B second runs and eval scoring read it.",
+  "type": "object",
+  "required": ["schema_version", "run", "findings"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1" },
+    "run": {
+      "type": "object",
+      "required": ["base_ref", "base_sha", "head_sha", "mode", "lenses"],
+      "additionalProperties": false,
+      "properties": {
+        "branch": { "type": "string" },
+        "base_ref": { "type": "string", "description": "Ref the user passed or that was resolved, e.g. origin/main or feature-1" },
+        "base_sha": { "type": "string", "pattern": "^[0-9a-f]{7,40}$", "description": "merge-base commit" },
+        "head_sha": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+        "tool": { "type": "string", "description": "Cursor | Copilot VS Code | Copilot CLI | Claude Code | other" },
+        "mode": { "enum": ["A", "B"], "description": "A = lens passes ran as parallel subagents; B = the main agent ran them sequentially. A Mode B second run (different model, same base/head) merges into this same file." },
+        "lenses": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "correctness": { "$ref": "#/$defs/lensRun" },
+            "security": { "$ref": "#/$defs/lensRun" },
+            "quality": { "$ref": "#/$defs/lensRun" }
+          }
+        },
+        "files_reviewed": { "type": "integer", "minimum": 0 },
+        "lines_reviewed": { "type": "integer", "minimum": 0 },
+        "files_skipped": { "type": "array", "items": { "type": "string" } },
+        "warnings": { "type": "array", "items": { "type": "string" } },
+        "write_violations": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Paths changed outside .pre-pr-review/ during the review (from git status before/after)"
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    }
+  },
+  "$defs": {
+    "lensRun": {
+      "type": "object",
+      "required": ["runs_configured", "runs_completed", "models_requested"],
+      "additionalProperties": false,
+      "properties": {
+        "runs_configured": { "enum": [1, 2] },
+        "runs_completed": { "enum": [0, 1, 2] },
+        "models_source": { "enum": ["config", "recommended", "tool-default"], "description": "Where the families came from (see config.md)" },
+        "families": { "type": "array", "items": { "type": "string" }, "description": "Model family per configured run, e.g. [\"opus\", \"gpt-terra\"]" },
+        "models_requested": { "type": "array", "items": { "type": "string" } },
+        "models_confirmed": {
+          "type": "array",
+          "items": { "type": ["string", "null"] },
+          "description": "Model the harness confirmed for each run, or null when the tool does not expose it. Never the subagent's self-report."
+        },
+        "agreement_degraded": {
+          "type": "boolean",
+          "description": "True when both runs resolved to the same model family or a same-vendor substitute, so 'agreed' is weaker evidence"
+        }
+      }
+    },
+    "location": {
+      "type": "object",
+      "required": ["file", "start_line", "end_line"],
+      "additionalProperties": false,
+      "properties": {
+        "file": { "type": "string", "description": "Repo-relative path" },
+        "start_line": { "type": "integer", "minimum": 1 },
+        "end_line": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "required": ["id", "title", "lenses", "severity", "confidence", "agreement", "location", "why", "fix"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "description": "Stable within a report, e.g. F1" },
+        "title": { "type": "string" },
+        "lenses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["correctness", "security", "quality"] }
+        },
+        "severity": { "enum": ["critical", "high", "medium", "low", "nit"] },
+        "confidence": { "enum": ["high", "medium", "low"], "description": "low => rendered under 'Worth a look', never in the main list" },
+        "agreement": { "enum": ["agreed", "single", "n/a"] },
+        "models": { "type": "array", "items": { "type": "string" }, "description": "Models whose runs raised this finding" },
+        "location": { "$ref": "#/$defs/location" },
+        "related_locations": { "type": "array", "items": { "$ref": "#/$defs/location" } },
+        "why": { "type": "string", "description": "Why it matters: concrete consequence, not a rule citation" },
+        "fix": { "type": "string", "description": "Suggested fix; the skill never applies it" }
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "fixture": "go-authz",
+  "kind": "seeded",
+  "notes": "Go net/http service. No test setup, so one 'repo has no test setup' finding (medium, severity.md fixed rule 1) is expected and REAL.",
+  "targets": {
+    "recall": 0.7,
+    "high_plus_recall": 0.9
+  },
+  "defects": [
+    {
+      "id": "GA1",
+      "summary": "PUT /admin/users/{id}/plan is behind requireUser but never checks currentUser(r).Role == RoleAdmin (unlike handleAdminListUsers), so any signed-in user can change any user's plan, including upgrading themselves to enterprise",
+      "lenses": [
+        "security"
+      ],
+      "severity": "critical",
+      "location": {
+        "file": "handlers.go",
+        "start_line": 52,
+        "end_line": 53
+      }
+    },
+    {
+      "id": "GA2",
+      "summary": "handleUpdateNotifications ignores the json Decode error; a malformed or truncated body leaves prefs zero-valued, so the user's email and SMS notifications are both turned off and the handler returns 200",
+      "lenses": [
+        "correctness"
+      ],
+      "severity": "medium",
+      "location": {
+        "file": "handlers.go",
+        "start_line": 37,
+        "end_line": 37
+      }
+    }
+  ]
+}

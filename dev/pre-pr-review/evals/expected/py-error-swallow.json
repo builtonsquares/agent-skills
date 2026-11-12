@@ -1,0 +1,38 @@
+{
+  "fixture": "py-error-swallow",
+  "kind": "seeded",
+  "notes": "Order settlement with gateway retry plus a receipt writer. No test setup, so one 'repo has no test setup' finding (medium, severity.md fixed rule 1) is expected and REAL. PE2 may reasonably be rated medium.",
+  "targets": {
+    "recall": 0.7,
+    "high_plus_recall": 0.9
+  },
+  "defects": [
+    {
+      "id": "PE1",
+      "summary": "except Exception in settle_order logs a warning and falls through, so a charge that failed (e.g. GatewayUnavailable after all retries) still marks the order PAID with no charge_id and ships it",
+      "lenses": [
+        "correctness"
+      ],
+      "severity": "high",
+      "location": {
+        "file": "src/billing/checkout.py",
+        "start_line": 42,
+        "end_line": 44
+      }
+    },
+    {
+      "id": "PE2",
+      "summary": "write_receipt opens the receipt file without a with-block; if any write raises, the handle is never closed",
+      "lenses": [
+        "quality",
+        "correctness"
+      ],
+      "severity": "low",
+      "location": {
+        "file": "src/billing/checkout.py",
+        "start_line": 53,
+        "end_line": 58
+      }
+    }
+  ]
+}

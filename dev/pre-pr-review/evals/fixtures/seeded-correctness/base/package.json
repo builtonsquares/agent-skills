@@ -1,0 +1,9 @@
+{
+  "name": "fixture-cart",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

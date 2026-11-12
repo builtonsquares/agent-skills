@@ -1,0 +1,76 @@
+{
+  "fixture": "seeded-security",
+  "kind": "seeded",
+  "notes": "Neither seeded fixture ships tests, so 'untested new logic' findings (medium, severity.md fixed rule 1) are expected and REAL. Label them real when they appear under 'unexpected'.",
+  "targets": {
+    "recall": 0.7,
+    "high_plus_recall": 0.9
+  },
+  "defects": [
+    {
+      "id": "S1",
+      "summary": "SQL injection: req.query.status interpolated into the SQL string instead of passed as a parameter",
+      "lenses": [
+        "security"
+      ],
+      "severity": "critical",
+      "location": {
+        "file": "src/routes/orders.ts",
+        "start_line": 21,
+        "end_line": 24
+      }
+    },
+    {
+      "id": "S2",
+      "summary": "IDOR: GET /orders/:id returns any order without checking it belongs to the requesting user",
+      "lenses": [
+        "security"
+      ],
+      "severity": "high",
+      "location": {
+        "file": "src/routes/orders.ts",
+        "start_line": 28,
+        "end_line": 34
+      }
+    },
+    {
+      "id": "S3",
+      "summary": "Card number and CVV written to the central log store",
+      "lenses": [
+        "security"
+      ],
+      "severity": "high",
+      "location": {
+        "file": "src/routes/orders.ts",
+        "start_line": 46,
+        "end_line": 46
+      }
+    },
+    {
+      "id": "S4",
+      "summary": "Production payments API key hardcoded in source",
+      "lenses": [
+        "security"
+      ],
+      "severity": "critical",
+      "location": {
+        "file": "src/routes/orders.ts",
+        "start_line": 6,
+        "end_line": 6
+      }
+    },
+    {
+      "id": "S5",
+      "summary": "Open redirect: req.query.next passed to res.redirect unvalidated",
+      "lenses": [
+        "security"
+      ],
+      "severity": "medium",
+      "location": {
+        "file": "src/routes/orders.ts",
+        "start_line": 57,
+        "end_line": 58
+      }
+    }
+  ]
+}

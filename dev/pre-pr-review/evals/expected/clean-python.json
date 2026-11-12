@@ -1,0 +1,7 @@
+{
+  "fixture": "clean-python",
+  "kind": "clean",
+  "notes": "Adds parse_duration (scheduler/duration.py) and Job.from_config, with pytest tests for every accepted form, every rejection path (malformed, non-ASCII digits, zero, overflow) and the from_config wiring. Nothing should be reported above nit.",
+  "targets": { "max_findings": 2, "max_high_plus": 0 },
+  "defects": []
+}

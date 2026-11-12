@@ -1,0 +1,6 @@
+{
+  "fixture": "clean",
+  "kind": "clean",
+  "targets": { "max_findings": 2, "max_high_plus": 0 },
+  "defects": []
+}

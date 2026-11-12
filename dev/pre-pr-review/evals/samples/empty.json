@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "run": {
+    "base_ref": "origin/main",
+    "base_sha": "0000000",
+    "head_sha": "1111111",
+    "mode": "A",
+    "lenses": {
+      "correctness": { "runs_configured": 2, "runs_completed": 2, "models_requested": ["opus", "gpt-terra"] },
+      "security": { "runs_configured": 2, "runs_completed": 2, "models_requested": ["opus", "gpt-terra"] },
+      "quality": { "runs_configured": 1, "runs_completed": 1, "models_requested": ["opus"] }
+    }
+  },
+  "findings": []
+}

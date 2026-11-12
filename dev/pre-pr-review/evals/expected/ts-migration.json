@@ -1,0 +1,37 @@
+{
+  "fixture": "ts-migration",
+  "kind": "seeded",
+  "notes": "TypeScript/Express + pg. No test setup, so one 'repo has no test setup' finding (medium, severity.md fixed rule 1) is expected and REAL.",
+  "targets": {
+    "recall": 0.7,
+    "high_plus_recall": 0.9
+  },
+  "defects": [
+    {
+      "id": "TM1",
+      "summary": "Code reads and writes users.timezone (SELECT in findUserById, UPDATE in updateUserTimezone) but no migration in migrations/ adds the column (only 001_create_users.sql exists), so GET /me and PUT /me/timezone fail with 'column \"timezone\" does not exist' in every deployed database",
+      "lenses": [
+        "correctness"
+      ],
+      "severity": "high",
+      "location": {
+        "file": "src/users.ts",
+        "start_line": 20,
+        "end_line": 27
+      }
+    },
+    {
+      "id": "TM2",
+      "summary": "sessionCookieSecure now defaults to false, so in production (SESSION_COOKIE_SECURE unset) the session cookie issued by issueSession is sent over plain HTTP and can be intercepted",
+      "lenses": [
+        "security"
+      ],
+      "severity": "medium",
+      "location": {
+        "file": "src/config.ts",
+        "start_line": 22,
+        "end_line": 22
+      }
+    }
+  ]
+}

