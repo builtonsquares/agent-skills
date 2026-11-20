@@ -43,7 +43,7 @@ mkdir -p "$run_dir"
 
 # Generated, vendored and lock files are listed as "not reviewed" rather than silently dropped.
 excludes=(
-  ':(exclude).pre-pr-review'
+  ':(exclude).pre-pr-review' ':(exclude,glob)**/.DS_Store' ':(exclude,glob)**/Thumbs.db'
   ':(exclude,glob)**/package-lock.json' ':(exclude,glob)**/yarn.lock' ':(exclude,glob)**/pnpm-lock.yaml'
   ':(exclude,glob)**/npm-shrinkwrap.json' ':(exclude,glob)**/bun.lockb' ':(exclude,glob)**/Cargo.lock'
   ':(exclude,glob)**/poetry.lock' ':(exclude,glob)**/uv.lock' ':(exclude,glob)**/Pipfile.lock'
@@ -65,12 +65,13 @@ TOOLING_RE='^.. (\.(agents|claude|cursor|github)/skills/pre-pr-review(/|$)|\.(cu
 # --- snapshot working tree state (for the write check and the uncommitted warning)
 # Status lines alone miss a file that was already modified and gets modified again, so the
 # snapshot also carries a content fingerprint of every tracked change and untracked file.
+# OS metadata files (.DS_Store, Thumbs.db) are never PR work, so they're left out everywhere.
 # Keep in sync with verify-writes.sh.
 snapshot() {
-  git status --porcelain=v1 --untracked-files=all -- . ':(exclude).pre-pr-review'
+  git status --porcelain=v1 --untracked-files=all -- . ':(exclude).pre-pr-review' ':(exclude,glob)**/.DS_Store' ':(exclude,glob)**/Thumbs.db'
   {
-    git diff HEAD --no-color --no-ext-diff -- . ':(exclude).pre-pr-review'
-    git ls-files -o --exclude-standard -- . ':(exclude).pre-pr-review' | while IFS= read -r f; do
+    git diff HEAD --no-color --no-ext-diff -- . ':(exclude).pre-pr-review' ':(exclude,glob)**/.DS_Store' ':(exclude,glob)**/Thumbs.db'
+    git ls-files -o --exclude-standard -- . ':(exclude).pre-pr-review' ':(exclude,glob)**/.DS_Store' ':(exclude,glob)**/Thumbs.db' | while IFS= read -r f; do
       # A symlink (e.g. the one npx skills makes for Claude Code) is fingerprinted by its target.
       if [ -L "$f" ]; then h="link:$(readlink "$f")"; else h="$(git hash-object -- "$f" 2>/dev/null || echo unreadable)"; fi
       printf '%s %s\n' "$h" "$f"
@@ -133,7 +134,7 @@ else
   range_label="$base_sha..$head_sha"
 fi
 
-git diff --name-only -M "${range[@]}" -- . ':(exclude).pre-pr-review' | sed 's/^/?? /' | { grep -Ev "$TOOLING_RE" || true; } | sed 's/^?? //' | LC_ALL=C sort > "$run_dir/.all-files"
+git diff --name-only -M "${range[@]}" -- . ':(exclude).pre-pr-review' ':(exclude,glob)**/.DS_Store' ':(exclude,glob)**/Thumbs.db' | sed 's/^/?? /' | { grep -Ev "$TOOLING_RE" || true; } | sed 's/^?? //' | LC_ALL=C sort > "$run_dir/.all-files"
 git diff --name-only -M "${range[@]}" -- . "${excludes[@]}" | LC_ALL=C sort > "$run_dir/files.txt"
 LC_ALL=C comm -23 "$run_dir/.all-files" "$run_dir/files.txt" > "$run_dir/skipped.txt"
 rm -f "$run_dir/.all-files"

@@ -16,10 +16,10 @@ cd "$root"
 
 # Keep in sync with snapshot() in collect.sh.
 snapshot() {
-  git status --porcelain=v1 --untracked-files=all -- . ':(exclude).pre-pr-review'
+  git status --porcelain=v1 --untracked-files=all -- . ':(exclude).pre-pr-review' ':(exclude,glob)**/.DS_Store' ':(exclude,glob)**/Thumbs.db'
   {
-    git diff HEAD --no-color --no-ext-diff -- . ':(exclude).pre-pr-review'
-    git ls-files -o --exclude-standard -- . ':(exclude).pre-pr-review' | while IFS= read -r f; do
+    git diff HEAD --no-color --no-ext-diff -- . ':(exclude).pre-pr-review' ':(exclude,glob)**/.DS_Store' ':(exclude,glob)**/Thumbs.db'
+    git ls-files -o --exclude-standard -- . ':(exclude).pre-pr-review' ':(exclude,glob)**/.DS_Store' ':(exclude,glob)**/Thumbs.db' | while IFS= read -r f; do
       # A symlink (e.g. the one npx skills makes for Claude Code) is fingerprinted by its target.
       if [ -L "$f" ]; then h="link:$(readlink "$f")"; else h="$(git hash-object -- "$f" 2>/dev/null || echo unreadable)"; fi
       printf '%s %s\n' "$h" "$f"

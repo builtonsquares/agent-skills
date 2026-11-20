@@ -46,7 +46,7 @@ Every unexpected finding was checked by hand. The no-test-setup finding is expec
 
 **Decisions:** the stacked cap stays at 2; Copilot failing it is a fair noise signal. PE2 stays seeded; a single low miss in one run isn't enough to retune on.
 
-**Uncommitted file:** the skill was copied into each repo as `.agents/`. `.agents/skills/pre-pr-review/` is already excluded, so the leftover file is probably something else in the copy (e.g. a macOS `.DS_Store`). The next run names it.
+**Uncommitted file:** confirmed as a macOS `.DS_Store` that came along when `.agents/` was copied in Finder. Fixed: collect.sh and verify-writes.sh now ignore `.DS_Store` and `Thumbs.db` everywhere (uncommitted count, write check, skipped list). Tested: three `.DS_Store` files → 0 uncommitted; a new one during the run → write check clean; a real new file → still flagged.
 
 ---
 
