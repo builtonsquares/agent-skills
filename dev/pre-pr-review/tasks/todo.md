@@ -236,8 +236,10 @@ Plan: [tasks/plan.md](plan.md) · Spec: [docs/specs/pre-pr-review.md](../docs/sp
 
 **Progress (2026-11-19):** Cursor and Copilot VS Code, all 13 fixtures, Mode A (`evals/results/2026-11-19-task14-cursor-copilot.md`). Cursor passed 13/13. Copilot passed 11/13 (stacked noise cap, PE2 miss). Fixed: model IDs come from the tool's live list, so retired IDs no longer fail runs; the second run's same-model stop is now Mode B only; uncommitted-file warnings name the files. Still open: label the unexpected findings, find out what Copilot leaves uncommitted, Copilot CLI/JetBrains, decide on the stacked cap.
 
+**Progress (2026-11-20):** Rerun after the fixes (`evals/results/2026-11-20-task14-rerun.md`): Cursor 13/13 and Copilot 13/13, recall 23/23 and high+ 14/14 in both. Precision: Cursor 100% (42 main findings), Copilot 98% (1 false out of 45). Labels done. Fixed: same-vendor reviewer runs now set degraded and need a warning; the stacked warning fills in the parent branch; the no-tests matcher is wider. Still open: JetBrains, and confirming whether the Copilot run was in the CLI.
+
 **Acceptance criteria:**
-- [~] `evals/results/<date>.md` records recall, precision, noise, and mode per tool (recall and mode recorded; precision needs labels)
+- [x] `evals/results/<date>.md` records recall, precision, noise, and mode per tool (2026-11-20 rerun)
 - [ ] All 7 spec success criteria met
 
 **Verification:**

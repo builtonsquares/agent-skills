@@ -1,7 +1,7 @@
 {
   "fixture": "py-error-swallow",
   "kind": "seeded",
-  "notes": "Order settlement with gateway retry plus a receipt writer. No test setup, so one 'repo has no test setup' finding (medium, severity.md fixed rule 1) is expected and REAL. PE2 may reasonably be rated medium.",
+  "notes": "Order settlement with gateway retry plus a receipt writer. No test setup, so one 'repo has no test setup' finding (medium, severity.md fixed rule 1) is expected and REAL. PE2 may reasonably be rated medium. Labeled 2026-11-20: concurrent settle_order calls can both pass the PENDING check and ship twice = real (low/medium).",
   "targets": {
     "recall": 0.7,
     "high_plus_recall": 0.9

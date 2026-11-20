@@ -18,7 +18,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Fixtures have no test setup on purpose, so one "no tests" finding per review is expected
 # (severity.md fixed rule 1). Mark it so it isn't mistaken for a false positive.
-NO_TESTS_RE = re.compile(r"\b(no|without) (test|tests|regression tests)\b|untested|test coverage|test setup", re.I)
+NO_TESTS_RE = re.compile(r"\b(no|without) (\w+ )?(test|tests)\b|untested|test coverage|test setup", re.I)
+
+
+def vendor(model) -> str:
+    m = str(model).lower()
+    return "claude" if any(k in m for k in ("claude", "opus", "sonnet", "haiku")) else "gpt" if "gpt" in m else m
 
 
 def latest_findings(repo: str):
@@ -35,6 +40,8 @@ def models_line(run: dict) -> str:
         done, conf = lr.get("runs_completed", "?"), lr.get("runs_configured", "?")
         runs = f"x{done}" if done == conf else f"x{done} of {conf}"
         flag = " (degraded)" if lr.get("agreement_degraded") else ""
+        if len(models) == 2 and all(models) and vendor(models[0]) == vendor(models[1]) and not flag:
+            flag = " (SAME VENDOR, NOT FLAGGED DEGRADED)"
         parts.append(f"{lens} {runs} ({', '.join(str(m) for m in models)}){flag}")
     return " · ".join(parts)
 
