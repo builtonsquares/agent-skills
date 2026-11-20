@@ -12,7 +12,7 @@ Until step 4, **do not open** `RUN_DIR/findings.json`, `RUN_DIR/report.md` or an
 
 Choose the mode as usual (`orchestration.md`). An earlier run is usually incomplete for one of two reasons: it was **Mode B** (one model, waiting for the user to switch), or it was **Mode A** and a reviewer run **failed** (e.g. a retired model ID).
 
-- **Mode A** (you can launch subagents): your own model doesn't matter. Launch only the pending runs, each on the family that's missing for that lens (the configured second family, resolved from your tool's model list per `config.md`). Don't stop and don't ask the user to switch models.
+- **Mode A** (you can launch subagents): your own model doesn't matter. Launch only the pending runs, each on the family that's missing for that lens (the configured second family, resolved from your tool's model list per `config.md`). If the earlier run's family is `unknown` (models couldn't be set), use the configured second family, or your tool pair's second member (`gpt-terra` in Cursor and Copilot). Don't stop and don't ask the user to switch models.
 - **Mode B** (you review yourself): compare your model's family with the family that already ran each pending lens.
   - **Same family for every pending lens:** stop without reviewing. Tell the user: "The first run of <lenses> already used <family>. Switch your model to **<second family>** (see `config.md`) and run `/pre-pr-review` again, or delete `<RUN_DIR>` to start over." Don't touch any files.
   - **Same family for some:** review only the lenses where you differ, and name the others in the final message.

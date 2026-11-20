@@ -106,6 +106,7 @@ If any lens has `runs_completed` < `runs_configured`, end your chat message (not
 
 - **Mode B:** "Second opinion: switch your model to **<family>** and run `/pre-pr-review` again to complete correctness and security."
 - **Mode A** (a reviewer run failed): "Run `/pre-pr-review` again to retry the failed <family> runs for correctness and security. You don't need to switch models."
+- **Mode A, models couldn't be set** (e.g. a router main model such as Copilot Fusion): "Second opinion: pick a specific main model (e.g. Claude Opus 5.5) instead of <router> and run `/pre-pr-review` again to complete correctness and security."
 
 The next run on this commit picks up automatically: it reviews only those lenses, independently, then merges (`second-run.md`).
 

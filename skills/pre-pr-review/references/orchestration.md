@@ -9,12 +9,14 @@ Check your own tools:
 | You have… | Mode |
 |---|---|
 | A subagent tool (Cursor: Task; Copilot VS Code: `runSubagent`; Copilot CLI: `task`; Claude Code: Agent) **that accepts a model per launch** | **A** |
-| A subagent tool without a model choice | **A on your own model** for every run. Each 2-run lens gets one run now (`runs_completed: 1`), and Step 7 offers the second |
+| A subagent tool, but you **can't set a model** for a launch (no model parameter, the parameter isn't offered with your current main model, or you'd have to leave it unspecified) | **A, one run per lens** on the tool's default. **Never launch two runs of one lens without a model for each:** they'd almost certainly be the same model, which costs a launch and adds no second opinion. Record `runs_completed: 1`, `families: ["unknown"]`, `models_requested: ["unspecified"]`, and Step 7 offers the second run |
 | No subagent tool | **B** (SKILL.md Step 3) |
 
 Record the result in `run.mode`. If the user passed `sequential`, use B.
 
-**Your main model is a router** ("Auto", "Copilot Fusion", or anything else that picks the model for you): the tool may ignore the model you pass per launch and send every reviewer to whatever it picks. Still use Mode A and still pass explicit models, but tell the user first, in one line: "Your main model is <router>, which may override the reviewer models. For a real two-model review, pick a specific model (e.g. Claude Opus 5.5) and run again." Then check what actually ran (section 4).
+**Your main model is a router** ("Auto", "Copilot Fusion", or anything else that picks the model for you): the tool may ignore the model you pass per launch and send every reviewer to whatever it picks. Tell the user first, in one line: "Your main model is <router>, which may override the reviewer models. For a real two-model review, pick a specific model (e.g. Claude Opus 5.5) and run again." Then:
+- if you **can** pass a model per launch, use Mode A as normal and check what actually ran (section 4);
+- if you **can't** (common with a router: the model parameter may be missing), use the "can't set a model" row above: **one run per lens**, never two on the default.
 
 ## 2. Plan the launches
 
