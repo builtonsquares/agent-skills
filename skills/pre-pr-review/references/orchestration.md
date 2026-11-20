@@ -9,12 +9,12 @@ Check your own tools:
 | You have… | Mode |
 |---|---|
 | A subagent tool (Cursor: Task; Copilot VS Code: `runSubagent`; Copilot CLI: `task`; Claude Code: Agent) **that accepts a model per launch** | **A** |
-| A subagent tool, but you **can't set a model** for a launch (no model parameter, the parameter isn't offered with your current main model, or you'd have to leave it unspecified) | **A, one run per lens** on the tool's default. **Never launch two runs of one lens without a model for each:** they'd almost certainly be the same model, which costs a launch and adds no second opinion. Record `runs_completed: 1`, `families: ["unknown"]`, `models_requested: ["unspecified"]`, and Step 7 offers the second run |
+| A subagent tool, but you **can't set a model** for a launch | You should have stopped at SKILL.md Step 0. Stop now, with its message |
 | No subagent tool | **B** (SKILL.md Step 3) |
 
 Record the result in `run.mode`. If the user passed `sequential`, use B.
 
-A router main model (Auto, Copilot Fusion) never gets here: SKILL.md Step 0 stops first.
+If you can't set reviewer models (often a router main model such as Auto or Copilot Fusion), SKILL.md Step 0 has already stopped the review.
 
 ## 2. Plan the launches
 

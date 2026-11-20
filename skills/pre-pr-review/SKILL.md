@@ -16,13 +16,17 @@ Review everything this branch changes, the way a careful senior engineer would b
 4. **Run the steps in order. Don't skip, merge, or improvise steps.** When a step says to run a script, run exactly that script once.
 5. **Don't execute the code under review.** No running tests, builds, interpreters, package scripts or snippets of the repo's code, even "just to check". Only `collect.sh` and `verify-writes.sh` run. Reason about behavior from the code; if you can't confirm something without running it, it's `confidence: low`.
 
-## Step 0: Check the main model
+## Step 0: Check that you can choose the reviewer models
 
-If your tool shows your main model as a **router** ("Auto", "Copilot Fusion", or any other setting that picks the model for you), **stop before doing anything else** (no script, no files). Say:
+Do this before anything else (no script, no files). Look at your own tools, not at what you believe your model is: a router such as "Auto" or "Copilot Fusion" usually doesn't tell you it's a router.
 
-"This review needs a specific main model so it can choose the reviewer models. Pick one (e.g. Claude Opus 5.5) instead of <router>, then run `/pre-pr-review` again."
+- **You have a subagent tool, and it lets you set a model per launch** (a `model` parameter, ideally with a list of allowed values): continue.
+- **You have no subagent tool at all:** continue. You'll review yourself (Mode B).
+- **Anything else:** you have a subagent tool but **can't set its model**, or you'd have to leave the model unspecified. **Stop.** Don't run the script and don't launch any reviewers. Say:
 
-A router can't promise two different reviewer models, and the tool may hide which model ran.
+  "This review needs to choose a different model for each reviewer, and I can't choose models right now. That usually means the main model is set to Auto or Copilot Fusion. Pick a specific main model (e.g. Claude Opus 5.5), then run `/pre-pr-review` again."
+
+Don't work around this by launching reviewers on the default model. They would all run on the same model, which costs launches and gives no second opinion.
 
 ## Step 1: Collect the change set (one shell call)
 
@@ -114,7 +118,6 @@ If any lens has `runs_completed` < `runs_configured`, end your chat message (not
 
 - **Mode B:** "Second opinion: switch your model to **<family>** and run `/pre-pr-review` again to complete correctness and security."
 - **Mode A** (a reviewer run failed): "Run `/pre-pr-review` again to retry the failed <family> runs for correctness and security. You don't need to switch models."
-- **Mode A, models couldn't be set** (the tool has no model choice per launch): "Second opinion: switch your main model to **<family>** and run `/pre-pr-review` again to complete correctness and security."
 
 The next run on this commit picks up automatically: it reviews only those lenses, independently, then merges (`second-run.md`).
 
