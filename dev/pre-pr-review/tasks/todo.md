@@ -265,4 +265,4 @@ Plan: [tasks/plan.md](plan.md) · Spec: [docs/specs/pre-pr-review.md](../docs/sp
 - [x] User guide: supported tools, known limits, how to report a problem (public-repo warning)
 - [x] Problem report issue template
 - [ ] Tag `pre-pr-review@1.0.0` and GitHub release (after sign-off)
-- [ ] Optional: Claude Code run on the 6 fixtures it hasn't seen
+- [x] Claude Code run on the 6 fixtures it hadn't seen: 6/6 PASS, 12/12, 100% precision (2026-11-20 rerun file)

@@ -15,5 +15,5 @@ First release for team testing.
 - Stops with a clear message when the main model is a router (Auto, Copilot Fusion).
 - Optional `.pre-pr-review.md` for runs, models and repo context.
 - Write check: reports any file changed during the review.
-- Evals: 13 fixtures, all passing in Cursor and Copilot in VS Code (Claude Code: the first 7); 100% of planted bugs found, 98–100% of main-list findings real.
+- Evals: 13 fixtures, all passing in Cursor, Copilot in VS Code and Claude Code; 100% of planted bugs found, 98–100% of main-list findings real.
 - Not tested yet: Copilot CLI, Copilot in JetBrains.

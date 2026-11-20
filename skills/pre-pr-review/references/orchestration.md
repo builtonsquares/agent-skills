@@ -67,10 +67,10 @@ As results arrive, tag each candidate array with its **lens, run, family and mod
 - **Check that the requested models actually ran.** If the tool shows a different model than you requested for any run, the tool overrode your choice. Then:
   - record the model that ran in `models_confirmed`, and its family in `families` (map it to the nearest family, or use its own name, e.g. `gpt-luna`);
   - add the warning `<tool> ignored the requested models: <lens> run <n> asked for <requested>, ran on <actual>.` (one line, listing every mismatched run);
-  - if both runs of a lens ran on the same vendor's models (both Claude, or both GPT, even different versions), set `agreement_degraded: true` for that lens;
+  - if both runs of a lens ran on the same family, or on the same vendor when the planned pair was two vendors (e.g. both GPT instead of Opus + GPT Terra), set `agreement_degraded: true` for that lens;
   - if **every** 2-run lens is degraded, end your chat message (Step 7) with: "The two-model check didn't happen: every reviewer ran on <model>. Pick a specific main model (e.g. Claude Opus 5.5) instead of <router or current model> and run again."
 
   Never record a run as the model you asked for when the tool showed another.
-- **Last check, every time:** for each 2-run lens, look at the two models that ran. If they're from the same vendor, whatever the reason (an override, a substitute, a relaunch on another model), `agreement_degraded` must be `true` and a warning must say which models ran. Every run that used a model outside the planned pair needs a warning too.
+- **Last check, every time:** for each 2-run lens, look at the two models that ran. If they're the same family, or the same vendor when the planned pair was two vendors, whatever the reason (an override, a substitute, a relaunch on another model), `agreement_degraded` must be `true` and a warning must say which models ran. Claude Code's planned pair (`opus` + `sonnet`) is one vendor by design and is not degraded. Every run that used a model outside the planned pair needs a warning too.
 
 Then go to Step 4 (synthesis). Synthesis step 1 (checking locations) is where you read the changed files yourself.

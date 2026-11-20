@@ -40,7 +40,8 @@ def models_line(run: dict) -> str:
         done, conf = lr.get("runs_completed", "?"), lr.get("runs_configured", "?")
         runs = f"x{done}" if done == conf else f"x{done} of {conf}"
         flag = " (degraded)" if lr.get("agreement_degraded") else ""
-        if len(models) == 2 and all(models) and vendor(models[0]) == vendor(models[1]) and not flag:
+        same_vendor_ok = run.get("tool") == "Claude Code"  # its planned pair is opus + sonnet
+        if len(models) == 2 and all(models) and vendor(models[0]) == vendor(models[1]) and not flag and not same_vendor_ok:
             flag = " (SAME VENDOR, NOT FLAGGED DEGRADED)"
         parts.append(f"{lens} {runs} ({', '.join(str(m) for m in models)}){flag}")
     return " · ".join(parts)

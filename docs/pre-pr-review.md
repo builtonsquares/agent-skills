@@ -12,7 +12,7 @@ It never changes code. Fixing is up to you (or your SDLC's remediation step).
 |---|---|
 | Cursor | Tested: all eval fixtures pass, reviewers run in parallel on two models |
 | GitHub Copilot in VS Code | Tested: all eval fixtures pass, reviewers run in parallel on two models |
-| Claude Code | Tested on the first 7 eval fixtures (Opus + Sonnet); not yet rerun on the full set |
+| Claude Code | Tested: all eval fixtures pass (Opus + Sonnet) |
 | Copilot CLI, Copilot in JetBrains | Not tested yet. It may work; please report what happens |
 
 ## Install (recommended: `npx skills`)
