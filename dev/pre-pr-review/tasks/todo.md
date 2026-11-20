@@ -264,5 +264,5 @@ Plan: [tasks/plan.md](plan.md) · Spec: [docs/specs/pre-pr-review.md](../docs/sp
 - [x] `metadata.version: "1.0.0"` in SKILL.md, root CHANGELOG.md, version column in README
 - [x] User guide: supported tools, known limits, how to report a problem (public-repo warning)
 - [x] Problem report issue template
-- [ ] Tag `pre-pr-review@1.0.0` and GitHub release (after sign-off)
+- [x] Tag `pre-pr-review@1.0.0` and GitHub release (2026-11-20)
 - [x] Claude Code run on the 6 fixtures it hadn't seen: 6/6 PASS, 12/12, 100% precision (2026-11-20 rerun file)
