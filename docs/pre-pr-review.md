@@ -60,7 +60,7 @@ Or ask in plain words: "run pre-pr-review" or "review my branch before I open a 
 | `runs=1` | Quick check: one model per topic (3 reviewers instead of 5) |
 | `sequential` | Don't use parallel subagents |
 
-Pick a specific model for the main chat (e.g. Claude Opus 5.5), not Auto or Copilot Fusion. A router may send every reviewer to the same model, which defeats the two-model check (the report warns when it happens). The report appears in chat and in `.pre-pr-review/<branch>/<commit>/report.md`. Add `.pre-pr-review/` to your `.gitignore`.
+Pick a specific model for the main chat (e.g. Claude Opus 5.5), not Auto or Copilot Fusion. The skill stops and asks you to pick one if it finds a router, because a router may send every reviewer to the same model. The report appears in chat and in `.pre-pr-review/<branch>/<commit>/report.md`. Add `.pre-pr-review/` to your `.gitignore`.
 
 ### Two models
 

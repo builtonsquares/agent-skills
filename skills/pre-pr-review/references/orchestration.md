@@ -14,9 +14,7 @@ Check your own tools:
 
 Record the result in `run.mode`. If the user passed `sequential`, use B.
 
-**Your main model is a router** ("Auto", "Copilot Fusion", or anything else that picks the model for you): the tool may ignore the model you pass per launch and send every reviewer to whatever it picks. Tell the user first, in one line: "Your main model is <router>, which may override the reviewer models. For a real two-model review, pick a specific model (e.g. Claude Opus 5.5) and run again." Then:
-- if you **can** pass a model per launch, use Mode A as normal and check what actually ran (section 4);
-- if you **can't** (common with a router: the model parameter may be missing), use the "can't set a model" row above: **one run per lens**, never two on the default.
+A router main model (Auto, Copilot Fusion) never gets here: SKILL.md Step 0 stops first.
 
 ## 2. Plan the launches
 
