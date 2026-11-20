@@ -258,7 +258,7 @@ Plan: [tasks/plan.md](plan.md) · Spec: [docs/specs/pre-pr-review.md](../docs/sp
   5. score.py validates every finding's fields; every run scored.
   6. Zero config everywhere; repo-override raises RO1 (task13); Task 9 config runs show runs/models in the header.
   7. No write violations in any 2026-11-20 run.
-- [ ] User sign-off before sharing with the team
+- [x] User sign-off before sharing with the team (2026-11-20)
 
 ### Task 15: 1.0.0 release
 - [x] `metadata.version: "1.0.0"` in SKILL.md, root CHANGELOG.md, version column in README

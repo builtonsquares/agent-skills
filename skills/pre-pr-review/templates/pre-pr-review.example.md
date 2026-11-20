@@ -1,6 +1,7 @@
 ---
 # pre-pr-review configuration. Copy this file to your repo root as .pre-pr-review.md.
 # Everything is optional; delete what you don't need. Reference: references/config.md
+# Presets for cost, speed and thoroughness: "Configure and tune" in the user guide (docs/pre-pr-review.md).
 reviewers:
   correctness: { runs: 2 }                       # 1 or 2. Default 2.
   security:    { runs: 2 }                       # 1 or 2. Default 2. Can't be turned off.

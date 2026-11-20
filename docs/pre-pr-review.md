@@ -84,12 +84,57 @@ By default, correctness and security are each reviewed by **two models** and qua
 
 If your tool can't run reviewers in parallel, the skill reviews with your current model and then tells you which model to switch to. Run it again on the same commit and it completes the review, merging in the second opinion.
 
-## Configure (optional)
+## Configure and tune (optional)
 
-Copy `templates/pre-pr-review.example.md` to your repo root as `.pre-pr-review.md`:
+With no config, every review runs **5 reviewers**: correctness ×2, security ×2, quality ×1, on your tool's default pair of models. That's the setup the evals measured. To change it, add `.pre-pr-review.md` at your repo root. Start from `templates/pre-pr-review.example.md` in the installed skill folder.
 
-- **Frontmatter:** runs and model families per topic, e.g. `quality: { runs: 2 }`. Details: `references/config.md`.
-- **Body:** repo context for the reviewers (conventions, focus areas). It can add checks, but can never turn off the security review.
+### What you can change
+
+| Setting | Where | What it trades |
+|---|---|---|
+| Runs per lens (`1` or `2`) | `reviewers.<lens>.runs` | Fewer runs: cheaper and faster. Two runs: a second opinion, and findings both models raise are marked **agreed** |
+| Models per lens | `reviewers.<lens>.models` | Smaller models (`sonnet`, `haiku`) cost less; two different vendors catch more |
+| One-off quick check | `/pre-pr-review runs=1` | Sets every lens to 1 run for this review only (3 reviewers) |
+| Repo context | Body of `.pre-pr-review.md` | Sharper focus: in the evals, a repo rule raised a convention finding from low to medium and made it cite the rule. Costs a little more input per reviewer |
+
+Lenses: `correctness`, `security`, `quality`. Security can't be turned off. Models are **families**, not exact IDs, so one file works in every tool: `opus`, `sonnet`, `haiku`, `gpt-terra`, `gpt`, `gemini`. The skill picks the newest model of each family from your tool's list. A family your tool doesn't offer (GPT or Gemini in Claude Code) is replaced with the other member of the tool's default pair, and the report says so.
+
+Run arguments beat the file, and the file beats the defaults. A bad setting gives a warning in the report and falls back to the default; it never stops the review.
+
+### Presets
+
+| Goal | Reviewers | Frontmatter |
+|---|---|---|
+| **Default** (balanced, eval-tested) | 5 | none |
+| **Quick check** before pushing a small change | 3 | none; type `/pre-pr-review runs=1` |
+| **Cheaper every day** | 3 | `correctness: { runs: 1 }` `security: { runs: 1 }` `quality: { runs: 1, models: [sonnet] }` |
+| **Most thorough** (risky or large PRs) | 6 | `quality: { runs: 2 }` |
+| **Security-sensitive repo**, lower cost elsewhere | 4 | `correctness: { runs: 1 }` `quality: { runs: 1, models: [sonnet] }` |
+
+Only the default was measured in the evals: every planted bug found, and 98–100% of findings real. The other presets trade some of that for cost or speed. A single run per lens loses the second opinion, and a smaller model may miss subtle bugs. If you lower cost, keep `security` at 2 runs.
+
+### Example `.pre-pr-review.md`
+
+```markdown
+---
+reviewers:
+  correctness: { runs: 2 }                          # two models (default pair)
+  security:    { runs: 2, models: [opus, gpt-terra] }
+  quality:     { runs: 1, models: [sonnet] }        # cheaper model for style and maintainability
+---
+
+## Conventions
+- Services return Result<T, AppError>; they never throw.
+- All SQL goes through src/db/query.ts with parameters.
+
+## Focus areas
+- src/billing/ moves money: treat double-charge and rounding risks as high.
+
+## Known exceptions
+- src/legacy/ is frozen; skip quality issues there unless the diff changes it.
+```
+
+The body is read by every reviewer. It can add checks and conventions, but it can't turn off security or let reviewers edit code. The header of each report shows the runs and models that were actually used, so you can check your settings took effect. Full schema: `references/config.md`.
 
 ## Report a problem
 
