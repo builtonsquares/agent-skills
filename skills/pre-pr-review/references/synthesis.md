@@ -61,7 +61,7 @@ Sort and number per `report-format.md` (F1… for the main list, W1… for low c
   "schema_version": "1",
   "run": {
     "branch": "<BRANCH>", "base_ref": "<BASE_REF>", "base_sha": "<BASE_SHA>", "head_sha": "<HEAD_SHA>",
-    "tool": "<tool you are running in>", "mode": "A|B",
+    "tool": "<Cursor | Copilot VS Code | Copilot CLI | Claude Code | other>", "mode": "A|B",
     "lenses": {
       "correctness": { "runs_configured": 2, "runs_completed": 2, "models_source": "recommended", "families": ["opus", "gpt-terra"], "models_requested": ["<id>", "<id>"], "models_confirmed": [null, null], "agreement_degraded": false },
       "security":    { "runs_configured": 2, "runs_completed": 2, "models_source": "recommended", "families": ["opus", "gpt-terra"], "models_requested": ["<id>", "<id>"], "models_confirmed": [null, null], "agreement_degraded": false },
@@ -73,6 +73,7 @@ Sort and number per `report-format.md` (F1… for the main list, W1… for low c
 }
 ```
 
+- `tool`: name it from your subagent tool, not from memory: `runSubagent` → `Copilot VS Code`, `task` in a terminal → `Copilot CLI`, `Task` → `Cursor`, `Agent` → `Claude Code`.
 - Low-confidence findings stay in `findings` with `confidence: "low"` and ids `W1…`. The renderer puts them under "Worth a look".
 - `models_confirmed` holds the model the **tool** confirmed for that run, or `null` when it doesn't say. Never use the reviewer's own claim about which model it is.
 - `files_skipped` is the content of `RUN_DIR/skipped.txt`. `warnings` are the Step 1 warnings, as one sentence each.

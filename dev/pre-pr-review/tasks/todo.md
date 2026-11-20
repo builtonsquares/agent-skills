@@ -236,11 +236,11 @@ Plan: [tasks/plan.md](plan.md) · Spec: [docs/specs/pre-pr-review.md](../docs/sp
 
 **Progress (2026-11-19):** Cursor and Copilot VS Code, all 13 fixtures, Mode A (`evals/results/2026-11-19-task14-cursor-copilot.md`). Cursor passed 13/13. Copilot passed 11/13 (stacked noise cap, PE2 miss). Fixed: model IDs come from the tool's live list, so retired IDs no longer fail runs; the second run's same-model stop is now Mode B only; uncommitted-file warnings name the files. Still open: label the unexpected findings, find out what Copilot leaves uncommitted, Copilot CLI/JetBrains, decide on the stacked cap.
 
-**Progress (2026-11-20):** Rerun after the fixes (`evals/results/2026-11-20-task14-rerun.md`): Cursor 13/13 and Copilot 13/13, recall 23/23 and high+ 14/14 in both. Precision: Cursor 100% (42 main findings), Copilot 98% (1 false out of 45). Labels done. Fixed: same-vendor reviewer runs now set degraded and need a warning; the stacked warning fills in the parent branch; the no-tests matcher is wider. Still open: JetBrains, and confirming whether the Copilot run was in the CLI.
+**Progress (2026-11-20):** Rerun after the fixes (`evals/results/2026-11-20-task14-rerun.md`): Cursor 13/13 and Copilot 13/13, recall 23/23 and high+ 14/14 in both. Precision: Cursor 100% (42 main findings), Copilot 98% (1 false out of 45). Labels done. Fixed: same-vendor reviewer runs now set degraded and need a warning; the stacked warning fills in the parent branch; the no-tests matcher is wider. The Copilot run was VS Code (the agent mislabeled it "Copilot CLI"; the tool name now comes from the subagent tool). **Deferred past 1.0.0 (user, 2026-11-20):** Copilot CLI and Copilot in JetBrains.
 
 **Acceptance criteria:**
 - [x] `evals/results/<date>.md` records recall, precision, noise, and mode per tool (2026-11-20 rerun)
-- [ ] All 7 spec success criteria met
+- [x] All 7 spec success criteria met, for Cursor, Copilot VS Code and Claude Code (evidence under Checkpoint 4)
 
 **Verification:**
 - [ ] The results file reviewed with the user
@@ -250,5 +250,19 @@ Plan: [tasks/plan.md](plan.md) · Spec: [docs/specs/pre-pr-review.md](../docs/sp
 **Scope:** M
 
 ## Checkpoint 4: Done
-- [ ] Success criteria 1–7 met with evidence
+- [x] Success criteria 1–7 met with evidence:
+  1. Same folder runs in Cursor, Copilot VS Code (2026-11-19/20) and Claude Code (Task 12 install run). CLI and JetBrains deferred.
+  2. Mode A in all three; Mode B via `sequential` plus a second run (2026-11-12 claude-code-modeA, cursor-run1).
+  3. Recall 23/23, high+ 14/14 in Cursor and Copilot (2026-11-20).
+  4. Precision 100% / 98%; clean fixtures 0 main findings (2026-11-20).
+  5. score.py validates every finding's fields; every run scored.
+  6. Zero config everywhere; repo-override raises RO1 (task13); Task 9 config runs show runs/models in the header.
+  7. No write violations in any 2026-11-20 run.
 - [ ] User sign-off before sharing with the team
+
+### Task 15: 1.0.0 release
+- [x] `metadata.version: "1.0.0"` in SKILL.md, root CHANGELOG.md, version column in README
+- [x] User guide: supported tools, known limits, how to report a problem (public-repo warning)
+- [x] Problem report issue template
+- [ ] Tag `pre-pr-review@1.0.0` and GitHub release (after sign-off)
+- [ ] Optional: Claude Code run on the 6 fixtures it hasn't seen

@@ -2,6 +2,8 @@
 name: pre-pr-review
 description: Deep pre-PR code review of the current branch's diff, covering bugs, security issues and code quality, ranked by severity, before opening a pull request or stacked PR. Read-only, never edits code. Use when the user says "pre-pr-review", "review my branch", "review my changes before I open a PR", or "check this diff for bugs/security issues".
 argument-hint: "[base=<branch>] [include-uncommitted] [runs=1|2] [sequential]"
+metadata:
+  version: "1.0.0"
 ---
 
 # pre-pr-review

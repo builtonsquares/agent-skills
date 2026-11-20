@@ -4,6 +4,17 @@ A read-only, pre-PR code review skill for **Cursor**, **GitHub Copilot** and **C
 
 It never changes code. Fixing is up to you (or your SDLC's remediation step).
 
+**Version 1.0.0.** See the [changelog](../CHANGELOG.md).
+
+## Supported tools
+
+| Tool | Status in 1.0.0 |
+|---|---|
+| Cursor | Tested: all eval fixtures pass, reviewers run in parallel on two models |
+| GitHub Copilot in VS Code | Tested: all eval fixtures pass, reviewers run in parallel on two models |
+| Claude Code | Tested on the first 7 eval fixtures (Opus + Sonnet); not yet rerun on the full set |
+| Copilot CLI, Copilot in JetBrains | Not tested yet. It may work; please report what happens |
+
 ## Install (recommended: `npx skills`)
 
 From the root of the repo you want to review:
@@ -51,7 +62,7 @@ In your tool's agent chat, on the branch you want to review:
 /pre-pr-review
 ```
 
-Or ask in plain words: "run pre-pr-review" or "review my branch before I open a PR". Copilot in JetBrains doesn't list skills as slash commands, so use plain words there.
+Or ask in plain words: "run pre-pr-review" or "review my branch before I open a PR".
 
 | Argument | Effect |
 |---|---|
@@ -79,5 +90,17 @@ Copy `templates/pre-pr-review.example.md` to your repo root as `.pre-pr-review.m
 
 - **Frontmatter:** runs and model families per topic, e.g. `quality: { runs: 2 }`. Details: `references/config.md`.
 - **Body:** repo context for the reviewers (conventions, focus areas). It can add checks, but can never turn off the security review.
+
+## Report a problem
+
+Open an issue with the **Problem report** template. Include the skill version, tool, main model, and what happened (wrong finding, missed bug, stopped early, edited a file, confusing report).
+
+**This repo is public.** Don't paste code, file paths, branch names or findings from a private repo. Describe the problem in general terms ("flagged a SQL query that uses parameters as injection"). If you can reproduce it on one of the eval fixtures, paste that output instead.
+
+## Known limits
+
+- It needs a specific main model. With Auto or Copilot Fusion it stops and asks you to pick one.
+- It reviews committed work against the default branch. On a stacked branch it reviews every layer and tells you which `base=` to pass to review only yours.
+- A full review runs 5 reviewers, so it takes longer and costs more than a single chat turn. Use `runs=1` for a quicker check with 3.
 
 Development, evals and the spec: [`dev/pre-pr-review/`](../dev/pre-pr-review/).
