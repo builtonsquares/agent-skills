@@ -234,8 +234,10 @@ Plan: [tasks/plan.md](plan.md) · Spec: [docs/specs/pre-pr-review.md](../docs/sp
 ### Task 14: Full portability eval + tuning
 **Description:** Run every fixture in all three tools and record the mode used. Hand-label each main-list finding as real or false. Tune the checklists and the "what NOT to report" lists until the targets are met.
 
+**Progress (2026-11-19):** Cursor and Copilot VS Code, all 13 fixtures, Mode A (`evals/results/2026-11-19-task14-cursor-copilot.md`). Cursor passed 13/13. Copilot passed 11/13 (stacked noise cap, PE2 miss). Fixed: model IDs come from the tool's live list, so retired IDs no longer fail runs; the second run's same-model stop is now Mode B only; uncommitted-file warnings name the files. Still open: label the unexpected findings, find out what Copilot leaves uncommitted, Copilot CLI/JetBrains, decide on the stacked cap.
+
 **Acceptance criteria:**
-- [ ] `evals/results/<date>.md` records recall, precision, noise, and mode per tool
+- [~] `evals/results/<date>.md` records recall, precision, noise, and mode per tool (recall and mode recorded; precision needs labels)
 - [ ] All 7 spec success criteria met
 
 **Verification:**

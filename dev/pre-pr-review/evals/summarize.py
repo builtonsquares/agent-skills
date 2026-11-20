@@ -10,10 +10,15 @@ about fixture code. No local paths, usernames or repo contents from the machine 
 import glob
 import json
 import os
+import re
 import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+# Fixtures have no test setup on purpose, so one "no tests" finding per review is expected
+# (severity.md fixed rule 1). Mark it so it isn't mistaken for a false positive.
+NO_TESTS_RE = re.compile(r"\b(no|without) (test|tests|regression tests)\b|untested|test coverage|test setup", re.I)
 
 
 def latest_findings(repo: str):
@@ -70,7 +75,8 @@ def main() -> None:
             recall, hplus = "—", "—"
         result = "PASS" if s["passed"] else "**FAIL**"
         rows.append(f"| {name} | {result} | {recall} | {hplus} | {s['main_findings']} | {s['worth_a_look_findings']} |")
-        missed = [d["id"] for d in s.get("defects", []) if not d["caught_by"]]
+        missed = [d["id"] + (" (in Worth a look)" if d.get("only_in_worth_a_look") else "")
+                  for d in s.get("defects", []) if not d["caught_by"]]
         lines = [f"**{name}**: {models_line(run)}"]
         if run.get("warnings"):
             lines += [f"- warning: {w}" for w in run["warnings"]]
@@ -79,7 +85,10 @@ def main() -> None:
         if missed:
             lines.append(f"- missed: {', '.join(missed)}")
         for u in s.get("unexpected", []):
-            lines.append(f"- unexpected {u['id']} [{u['severity']}] {u['title']}  ← label: real / false")
+            if NO_TESTS_RE.search(u["title"]):
+                lines.append(f"- expected {u['id']} [{u['severity']}] {u['title']}  (no-test-setup rule)")
+            else:
+                lines.append(f"- unexpected {u['id']} [{u['severity']}] {u['title']}  ← label: real / false")
         details.append("\n".join(lines))
 
     print("## Scores\n")

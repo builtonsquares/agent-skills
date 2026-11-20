@@ -24,7 +24,7 @@ Use this structure exactly. Omit a section only where noted.
 <WARNINGS: omit the block entirely if there are none. One line each, in this order: write violations, stacked branch, uncommitted/untracked, failed reviewer runs, model availability and degraded agreement, config problems:>
 > ⚠️ Files changed during this review: `src/a.ts`, … (see Step 5)
 > ⚠️ This branch appears stacked on `feature-1`. …
-> ⚠️ 3 uncommitted changes were NOT reviewed. …   (singular: "1 uncommitted change was NOT reviewed.")
+> ⚠️ 3 uncommitted changes were NOT reviewed (src/a.ts, notes.txt, .vscode/settings.json). …   (singular: "1 uncommitted change was NOT reviewed (<path>).")
 > ⚠️ correctness: both runs used the same model (opus, opus), so "agreed" is weaker evidence than usual.   (one line per lens with agreement_degraded)
 > ⚠️ .pre-pr-review.md: unknown setting "reviewers.performance" ignored.
 

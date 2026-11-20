@@ -83,6 +83,8 @@ snapshot > "$run_dir/status.before"
 counted="$(grep -v '^#FINGERPRINT' "$run_dir/status.before" | grep -Ev "$TOOLING_RE" || true)"
 uncommitted="$(printf '%s' "$counted" | grep -c . || true)"
 untracked="$(printf '%s' "$counted" | grep -c '^??' || true)"
+# Up to 5 of those paths, so the warning can say what they are (an editor or tool may create files).
+uncommitted_paths="$(printf '%s\n' "$counted" | grep . | cut -c4- | head -5 | paste -sd, - | sed 's/,/, /g' || true)"
 
 # --- resolve the base
 if [ -n "$base_arg" ]; then
@@ -197,6 +199,7 @@ out LINES_CHANGED "$lines_changed"
 out FILES_SKIPPED "$files_skipped"
 out UNCOMMITTED_CHANGES "$uncommitted"
 out UNTRACKED_FILES "$untracked"
+[ "$uncommitted" -gt 0 ] && out UNCOMMITTED_PATHS "$uncommitted_paths$([ "$uncommitted" -gt 5 ] && echo ", …")"
 out STACKED_ON "${stacked_on:-none}"
 out ASK_FIRST "$ask_first"
 out PRIOR_RUN "$prior_run"

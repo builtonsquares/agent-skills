@@ -23,7 +23,7 @@ Using the lens settings from Step 2 (`config.md`), build one launch per run:
 | e.g. 1 | correctness | 1 | opus | `claude-opus-5-5-high` |
 | e.g. 2 | correctness | 2 | gpt-terra | `gpt-5.6-terra-high` |
 
-Resolve each family with the table and rules in `config.md`. Unset `models` means your tool's recommended pair (Claude Code: `opus` + `sonnet`). A configured family your tool doesn't offer gets the substitute and warning from `config.md` rule 3.
+Resolve each family with the table and rules in `config.md`. Unset `models` means your tool's recommended pair (Claude Code: `opus` + `sonnet`). Pick each ID from your tool's model list (newest version in the family, `config.md` rules 1–2), not from memory. A configured family your tool doesn't offer gets the substitute and warning from `config.md` rule 4.
 
 Default config = **5 launches**: correctness ×2, security ×2, quality ×1.
 
@@ -60,7 +60,7 @@ As results arrive, tag each candidate array with its **lens, run, family and mod
 
 - **Concurrency limit** (the tool refuses some launches because too many subagents are running): that's not a failure. Launch the refused runs as soon as earlier ones finish, as few batches as possible, and keep `mode: A`. Don't count it against the one relaunch below.
 - **No valid JSON array**, or the launch errored: relaunch that one run once, with the same model. If it fails again, leave it out, count only successful runs in `runs_completed`, and add the warning `<lens> run <n> (<family>) failed; this lens has <k> of <runs> runs.`
-- **Model ID refused** by the tool: resolve again with `config.md` rules 2–3, relaunch once, and warn.
+- **Model ID refused or retired** (e.g. "model not available", "deprecated", "unsupported"): this is not a reviewer failure and doesn't use up the relaunch. Read your tool's model list again, pick the newest model in the **same family** (`config.md` rule 2) and relaunch. Never stop the review over a refused ID. Warn only if the family itself was unavailable (rule 4).
 - `models_requested`: the model ID you passed, per successful run. `models_confirmed`: the model the **tool** reports for that run (e.g. Copilot CLI's `model_info`), otherwise `null`.
 
 Then go to Step 4 (synthesis). Synthesis step 1 (checking locations) is where you read the changed files yourself.

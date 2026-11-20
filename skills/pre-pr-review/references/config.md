@@ -74,18 +74,23 @@ Configure **families**, not exact IDs, so one config works in every tool:
 
 ### Resolving a family to the model ID your tool uses
 
-1. If the table below has an entry for your tool and the family, use it.
-2. Otherwise pick the **newest** model your tool offers whose name contains the family (e.g. `sonnet` → "Claude Sonnet 5.5").
-3. If nothing matches, use the member of **your tool's recommended pair** that the lens's other run isn't using, and add the warning `<family> isn't available in <tool>; <lens> run <n> used <substitute>.` If both runs of a lens still land on the same family, set `agreement_degraded: true`.
+Model versions change often and old ones get retired, so **never launch an ID from memory or from the table below without checking it against your tool's list.**
+
+1. **Read the list of models your tool offers** for subagent launches (e.g. the allowed values of Cursor's Task tool `model`, VS Code's `runSubagent` model, Copilot CLI's `task` model).
+2. **Pick the newest model in that list whose name contains the family**, highest version number first (e.g. `gpt-terra` → "GPT-6.1 Terra (copilot)" over "GPT-5.6 Terra (copilot)"). Skip "Auto". This is the normal path and needs **no warning**, even if the version differs from the table.
+3. **If your tool shows no list**, use the table's spelling pattern with the newest version you know of. If the launch is refused, see `orchestration.md` (Collect).
+4. **If nothing matches the family**, use the member of **your tool's recommended pair** that the lens's other run isn't using, and add the warning `<family> isn't available in <tool>; <lens> run <n> used <substitute>.` If both runs of a lens still land on the same family, set `agreement_degraded: true`.
+
+**Spelling patterns** (examples seen on 2026-11-19; versions will move on):
 
 | Family | Cursor (Task tool `model`) | Copilot: VS Code (`runSubagent`) | Copilot: CLI (`task`) | Claude Code (Agent tool) |
 |---|---|---|---|---|
 | `opus` | `claude-opus-5-5-<effort>` | `Claude Opus 5.5 (copilot)` | `claude-opus-5.5` | `opus` |
-| `gpt-terra` | `gpt-5.6-terra-<effort>` | `GPT-5.6 Terra (copilot)` | `gpt-5.6-terra` | not available (rule 3) |
-| `sonnet` | — (rule 2) | — (rule 2) | — (rule 2) | `sonnet` |
-| `haiku` | — (rule 2) | — (rule 2) | — (rule 2) | `haiku` |
+| `gpt-terra` | `gpt-5.6-terra-<effort>` | `GPT-6.1 Terra (copilot)` | `gpt-5.6-terra` | not available (rule 4) |
+| `sonnet` | `claude-sonnet-5-5-<effort>` | `Claude Sonnet 5.5 (copilot)` | `claude-sonnet-5.5` | `sonnet` |
+| `haiku` | `claude-haiku-5-5-thinking-<effort>` | `Claude Haiku 5.5 (copilot)` | `claude-haiku-5.5` | `haiku` |
 
-Use the exact spelling: VS Code rejects shorthand such as `opus`. These IDs were observed on 2026-11-12. If one is refused, fall back to rule 2.
+Use the exact spelling from your tool's list: VS Code rejects shorthand such as `opus`, and wants the ` (copilot)` suffix. Claude Code's aliases always point at the newest model.
 
 **Cursor `<effort>`:** use the highest reasoning variant your Cursor offers for that model (`high`, then `medium`). Accounts differ, so this isn't a warning. The header shows the ID that ran.
 

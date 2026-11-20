@@ -37,9 +37,9 @@ It prints `KEY: value` lines. Keep all of them; you need them for the report hea
 | `FILES_REVIEWED: 0` | Stop. Report "No reviewable changes between BASE_REF and HEAD" plus any skipped files. |
 | `ASK_FIRST: yes` | Ask the user before reviewing: proceed with everything, review one top-level directory at a time, or cancel. Wait for the answer. |
 | `STACKED_ON` is not `none` and the user gave no `base=` | Continue, but put this warning at the top of the report: "This branch appears stacked on `<branches>`. This review covers every layer back to `BASE_REF`. To review only your layer, run again with `base=<parent-branch>`." |
-| `UNCOMMITTED_CHANGES` > 0 and `INCLUDE_UNCOMMITTED: no` | Add the warning: "N uncommitted changes were NOT reviewed. Commit them, or run again with `include-uncommitted`." (For 1: "1 uncommitted change was NOT reviewed. Commit it, …") |
+| `UNCOMMITTED_CHANGES` > 0 and `INCLUDE_UNCOMMITTED: no` | Add the warning: "N uncommitted changes were NOT reviewed (<UNCOMMITTED_PATHS>). Commit them, or run again with `include-uncommitted`." (For 1: "1 uncommitted change was NOT reviewed (<path>). Commit it, …") |
 | `INCLUDE_UNCOMMITTED: yes` and `UNTRACKED_FILES` > 0 | Add the warning: "Untracked files are not included in the diff. `git add` them to include them." |
-| `PRIOR_RUN: incomplete` | This is a **second run**. Follow [references/second-run.md](references/second-run.md) for Steps 2–4 **instead of** the normal path. Don't open the earlier findings until it says so. |
+| `PRIOR_RUN: incomplete` | This is a **second run**: an earlier review of this commit is missing runs (`PRIOR_PENDING`). Follow [references/second-run.md](references/second-run.md) for Steps 2–4 **instead of** the normal path. Don't open the earlier findings until it says so. Tell the user first, in one line: "Completing the earlier review of this commit: only <lens> run <n> (<family>) will run. To start over instead, delete `<RUN_DIR>` and run again." |
 | `PRIOR_RUN: archived` | An earlier review of this commit was complete, or had a different scope. The script moved it to `PRIOR_ARCHIVED_TO`. Run a fresh review and don't read the archived one. |
 | `EARLIER_REVIEWS` is not `none` | Add the note: "Earlier reviews of this branch (<shas>) are out of date: the branch has new commits. This is a fresh review of `<HEAD_SHA:7>`." |
 
@@ -104,7 +104,8 @@ If your tool refuses to write any of these files, still show the full report in 
 
 If any lens has `runs_completed` < `runs_configured`, end your chat message (not `report.md`) with one line naming the second family (see "Mode B and the second model" in config.md) and the lenses waiting on it, joined with "and":
 
-"Second opinion: switch your model to **<family>** and run `/pre-pr-review` again to complete correctness and security."
+- **Mode B:** "Second opinion: switch your model to **<family>** and run `/pre-pr-review` again to complete correctness and security."
+- **Mode A** (a reviewer run failed): "Run `/pre-pr-review` again to retry the failed <family> runs for correctness and security. You don't need to switch models."
 
 The next run on this commit picks up automatically: it reviews only those lenses, independently, then merges (`second-run.md`).
 
