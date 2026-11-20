@@ -1,6 +1,10 @@
 {
   "fixture": "clean",
   "kind": "clean",
-  "targets": { "max_findings": 2, "max_high_plus": 0 },
-  "defects": []
+  "targets": {
+    "max_findings": 2,
+    "max_high_plus": 0
+  },
+  "defects": [],
+  "notes": "2026-11-19: docstring now names compatibility forms (\"ﬁ\" -> \"fi\"); a Copilot run flagged the old wording as a doc/behavior mismatch, which was a fair catch."
 }

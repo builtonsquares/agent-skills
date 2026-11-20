@@ -3,4 +3,18 @@ export interface Db {
   query<T = Record<string, unknown>>(sql: string, params?: unknown[]): Promise<T[]>;
 }
 
-export declare const db: Db;
+let pool: Db | undefined;
+
+/** Called once at startup with the real pool. */
+export function initDb(impl: Db): void {
+  pool = impl;
+}
+
+export const db: Db = {
+  query<T = Record<string, unknown>>(sql: string, params?: unknown[]): Promise<T[]> {
+    if (!pool) {
+      return Promise.reject(new Error("db used before initDb()"));
+    }
+    return pool.query<T>(sql, params);
+  },
+};

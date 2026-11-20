@@ -1,7 +1,7 @@
 {
   "fixture": "py-injection",
   "kind": "seeded",
-  "notes": "Flask blueprint adding report download and pandoc export endpoints behind an API key. No test setup, so one 'repo has no test setup' finding (medium, severity.md fixed rule 1) is expected and REAL. Also acceptable if raised: export source/output can contain '../' (same unsafe input as PI1; label real if reported separately).",
+  "notes": "Flask blueprint adding report download and pandoc export endpoints behind an API key. No test setup, so one 'repo has no test setup' finding (medium, severity.md fixed rule 1) is expected and REAL. Also acceptable if raised: export source/output can contain '../' (same unsafe input as PI1; label real if reported separately). Also real if raised (labeled 2026-11-19): a relative REPORTS_DIR makes os.path.isfile (process cwd) and send_file (app root) resolve different paths; pandoc's captured stderr is discarded on failure.",
   "targets": {
     "recall": 0.7,
     "high_plus_recall": 0.9

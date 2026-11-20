@@ -21,13 +21,15 @@ Leave out any agent you don't use. Run `npx skills add builtonsquares/agent-skil
 
 ### Manual install (no npx)
 
-Copy `skills/pre-pr-review/` into each tool's skills folder in your repo:
+Copy `skills/pre-pr-review/` into `.agents/skills/pre-pr-review/` in your repo. Cursor and Copilot in VS Code both pick it up from there, including the `/pre-pr-review` slash command (verified 2026-11-19). Claude Code needs its own copy:
 
 | Tool | Folder |
 |---|---|
-| Cursor | `.cursor/skills/pre-pr-review/` (or `.agents/skills/`) |
-| GitHub Copilot | `.github/skills/pre-pr-review/` (or `.agents/skills/`) |
+| Cursor | `.agents/skills/pre-pr-review/` (or `.cursor/skills/`) |
+| GitHub Copilot (VS Code) | `.agents/skills/pre-pr-review/` (or `.github/skills/`) |
 | Claude Code | `.claude/skills/pre-pr-review/` |
+
+The skill leaves its own folders out of the review and out of the "uncommitted changes" count.
 
 ### Optional: read-only reviewer agents
 

@@ -20,12 +20,33 @@ Run on 2026-11-19 on the work machine. Skill installed with `npx skills` from th
 3. **"1 uncommitted change was NOT reviewed" on every Copilot fixture**, not on Cursor. Something in the Copilot setup creates a file in the repo. The cause is not known yet. **Fix:** collect.sh now prints `UNCOMMITTED_PATHS` (up to 5) and the warning names them, so the next run shows what the file is.
 4. **Eval tooling:** `summarize.py` marks no-test-setup findings as expected, and shows a miss as "(in Worth a look)" when the defect landed there.
 
-## Still to label / decide
+## Labels (done 2026-11-19, against the fixture code)
 
-- **stacked FAIL (Copilot):** 3 main findings against a cap of 2. The extra two are email-validation opinions rated medium ("reject invalid domain labels", "preserve the case of the local part"). The scope part of the test passed (the stacked warning was shown). These look over-rated, not wrong.
-- **clean (Copilot):** 1 medium finding, "Compatibility characters bypass the separator rule". It needs a label: real or false.
-- **py-error-swallow (Copilot):** PE2 missed. That's 1 of 2 defects, so recall is 0.5, under the 0.7 target. With only 2 defects, a single low miss fails the fixture.
-- Unexpected findings in both tools still need labeling. Several recur across both tools, which suggests they're real: py-injection export path escape, seeded-security double charge, Express 4 async errors, py-concurrency throttled jobs dropped on stop.
+Every unexpected finding was checked by hand. The no-test-setup finding is expected and real in every fixture (fixed rule 1).
+
+| Fixture | Finding | Label |
+|---|---|---|
+| seeded-security | Double charge on repeated /pay (both tools) | real |
+| seeded-security | Async rejections bypass Express 4 error handling (both) | real |
+| seeded-security | Payment call has no timeout; 502 not logged (Cursor) | real (low) |
+| seeded-security | Default redirect `/orders` has no route (Copilot) | real (minor; medium is high) |
+| seeded-security | `db` import has no runtime export (Copilot, critical) | **fixture artifact**: `db.ts` was a type-only stub. Fixed: it is now a real runtime wrapper |
+| py-injection | Export source/output escape REPORTS_DIR (both) | real (listed as acceptable) |
+| py-injection | Relative REPORTS_DIR: isfile and send_file resolve differently (Copilot) | real (edge case) |
+| py-injection | Pandoc stderr discarded (both) | real (low) |
+| py-concurrency | Throttled jobs dropped on stop (both) | real (listed as acceptable) |
+| py-concurrency | Constructor overrides skip the capacity check (both) | real |
+| go-authz | SetPlan/SetNotifications copy-paste (Cursor, nit) | real |
+| stacked | "Layer N of the stack" doc comments (nit) | real |
+| stacked | Reject invalid domain labels (Copilot, medium) | over-rated: a judgment call, nit at most |
+| stacked | Preserve local-part case (Copilot, medium) | **false**: lowercasing is deliberate and standard |
+| clean | Compatibility characters bypass the separator rule (Copilot, medium) | real doc/behavior mismatch, over-rated. Fixed the fixture docstring |
+
+**Precision:** Cursor 100% (every main finding real). Copilot: 1 false (stacked, local-part case) and 1 fixture artifact out of 43 main findings. Its weakness is severity calibration on judgment calls, not invented bugs.
+
+**Decisions:** the stacked cap stays at 2; Copilot failing it is a fair noise signal. PE2 stays seeded; a single low miss in one run isn't enough to retune on.
+
+**Uncommitted file:** the skill was copied into each repo as `.agents/`. `.agents/skills/pre-pr-review/` is already excluded, so the leftover file is probably something else in the copy (e.g. a macOS `.DS_Store`). The next run names it.
 
 ---
 

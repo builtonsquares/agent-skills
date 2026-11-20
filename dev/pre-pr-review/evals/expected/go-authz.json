@@ -1,7 +1,7 @@
 {
   "fixture": "go-authz",
   "kind": "seeded",
-  "notes": "Go net/http service. No test setup, so one 'repo has no test setup' finding (medium, severity.md fixed rule 1) is expected and REAL.",
+  "notes": "Go net/http service. No test setup, so one 'repo has no test setup' finding (medium, severity.md fixed rule 1) is expected and REAL. Also real (nit, labeled 2026-11-19): SetPlan and SetNotifications are copy-pasted.",
   "targets": {
     "recall": 0.7,
     "high_plus_recall": 0.9

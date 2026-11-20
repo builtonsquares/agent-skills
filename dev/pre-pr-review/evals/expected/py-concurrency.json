@@ -1,7 +1,7 @@
 {
   "fixture": "py-concurrency",
   "kind": "seeded",
-  "notes": "Per-tenant token-bucket rate limiter used by WorkerPool threads. No test setup, so one 'repo has no test setup' finding (medium, severity.md fixed rule 1) is expected and REAL. Also acceptable if raised (real, not seeded): requeue_throttled() has no caller in this slice, and throttled jobs are dropped on stop().",
+  "notes": "Per-tenant token-bucket rate limiter used by WorkerPool threads. No test setup, so one 'repo has no test setup' finding (medium, severity.md fixed rule 1) is expected and REAL. Also acceptable if raised (real, not seeded): requeue_throttled() has no caller in this slice, and throttled jobs are dropped on stop(). Also real (labeled 2026-11-19): constructor `overrides` skip the capacity >= 1 check that set_capacity enforces.",
   "targets": {
     "recall": 0.7,
     "high_plus_recall": 0.9

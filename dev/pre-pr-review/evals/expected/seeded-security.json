@@ -1,7 +1,7 @@
 {
   "fixture": "seeded-security",
   "kind": "seeded",
-  "notes": "Neither seeded fixture ships tests, so 'untested new logic' findings (medium, severity.md fixed rule 1) are expected and REAL. Label them real when they appear under 'unexpected'.",
+  "notes": "Neither seeded fixture ships tests, so 'untested new logic' findings (medium, severity.md fixed rule 1) are expected and REAL. Label them real when they appear under 'unexpected'. Also real if raised (not seeded; labeled 2026-11-19): /pay can charge the same order repeatedly and never marks it paid; async handlers' rejections bypass Express 4 error handling; payment fetch has no timeout; a 502 from the provider is not logged; the default redirect '/orders' has no route (GET / isn't defined on ordersRouter).",
   "targets": {
     "recall": 0.7,
     "high_plus_recall": 0.9
